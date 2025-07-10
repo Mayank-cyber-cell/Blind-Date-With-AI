@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { GameState, Character, ChatMessage } from './types';
 import WelcomeScreen from './components/WelcomeScreen';
 import CharacterSelection from './components/CharacterSelection';
 import ChatInterface from './components/ChatInterface';
 import RevealScreen from './components/RevealScreen';
+import ThemeToggle from './components/ThemeToggle';
+import { useTheme } from './hooks/useTheme';
 
 function App() {
+  const { isDark, toggleTheme } = useTheme();
   const [gameState, setGameState] = useState<GameState>({
     currentScreen: 'welcome',
     messages: [],
@@ -49,7 +53,22 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className={`min-h-screen ${isDark ? '' : 'light-theme'}`}>
+      <Toaster 
+        position="top-center"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: 'rgba(0, 0, 0, 0.8)',
+            color: '#fff',
+            backdropFilter: 'blur(10px)',
+            border: '1px solid rgba(255, 255, 255, 0.2)',
+          },
+        }}
+      />
+      
+      <ThemeToggle isDark={isDark} onToggle={toggleTheme} />
+      
       {gameState.currentScreen === 'welcome' && (
         <WelcomeScreen onStart={handleStart} />
       )}

@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Heart, User, AlertCircle, Sparkles } from 'lucide-react';
+import { Send, Heart, User, AlertCircle, Sparkles, Download } from 'lucide-react';
 import { Character, ChatMessage } from '../types';
 import { aiService } from '../services/aiService';
 import TypewriterText from './TypewriterText';
 import FloatingHearts from './FloatingHearts';
+import TypingIndicator from './TypingIndicator';
+import EndDateButton from './EndDateButton';
+import { motion, AnimatePresence } from 'framer-motion';
+import toast from 'react-hot-toast';
 
 const getInitialGreeting = (character: Character): string => {
   const greetings = {
@@ -28,7 +32,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
   const [conversationStage, setConversationStage] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [sendDisabled, setSendDisabled] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     // Initialize AI service with character
@@ -50,11 +56,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
   }, [character]);
 
   useEffect(() => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
   }, [messages]);
 
   const handleSendMessage = async () => {
-    if (!inputValue.trim() || isTyping) return;
+    if (!inputValue.trim() || isTyping || sendDisabled) return;
 
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
@@ -66,6 +77,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsTyping(true);
+    setSendDisabled(true);
     setError(null);
 
     try {
@@ -85,13 +97,14 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
         setConversationStage(prev => prev + 1);
 
         // Trigger reveal after several messages
-        if (conversationStage >= 8) {
+        if (conversationStage >= 6) {
           setTimeout(() => {
             onReveal([...messages, userMessage, aiMessage]);
           }, 2000);
         }
         
         setIsTyping(false);
+        setSendDisabled(false);
       }, 1500 + Math.random() * 1000);
     } catch (error) {
       console.error('Error generating response:', error);
@@ -114,6 +127,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
           setError('I seem to be having connection issues... But I\'m still here! 💕');
         }
         setIsTyping(false);
+        setSendDisabled(false);
       }, 2000);
     }
   };
@@ -123,6 +137,32 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  const handleEndDate = () => {
+    toast.success('Date ended! Time for the big reveal! 💕');
+    setTimeout(() => {
+      onReveal(messages);
+    }, 1000);
+  };
+
+  const exportChat = () => {
+    const chatContent = messages.map(m => 
+      `${m.sender === 'user' ? 'You' : character.name}: ${m.content}`
+    ).join('\n');
+    
+    const blob = new Blob([
+      `Blind Date with AI - Chat with ${character.name}\n\n${chatContent}\n\nDate: ${new Date().toLocaleDateString()}`
+    ], { type: 'text/plain' });
+    
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `blind-date-${character.name}-${new Date().toISOString().split('T')[0]}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    toast.success('Chat exported! 📱');
   };
 
   const getMoodIcon = (mood?: string) => {
@@ -139,6 +179,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
   return (
     <div className={`min-h-screen bg-gradient-to-br ${character.theme.primary} relative overflow-hidden`}>
       <FloatingHearts />
+      
+      <EndDateButton onEndDate={handleEndDate} conversationStage={conversationStage} />
       
       {/* Ambient background effects */}
       <div className="absolute inset-0">
@@ -160,23 +202,36 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
           <div className="flex space-x-2">
             <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse-slow" />
             <Heart className="w-5 h-5 text-pink-400 animate-heart-beat" />
+            <motion.button
+              onClick={exportChat}
+              className="glass-effect rounded-full p-2 hover:bg-white/20 transition-all duration-300"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Download className="w-4 h-4 text-white/70" />
+            </motion.button>
           </div>
         </div>
       </div>
 
       {/* Chat Messages */}
-      <div className="max-w-4xl mx-auto p-4 pb-24 space-y-6 relative z-10">
+      <div 
+        ref={messagesContainerRef}
+        className="max-w-4xl mx-auto p-4 pb-24 space-y-6 relative z-10 max-h-[calc(100vh-200px)] overflow-y-auto"
+      >
         {messages.map((message, index) => (
-          <div
+          <motion.div
             key={message.id}
-            className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up`}
-            style={{ animationDelay: `${index * 100}ms` }}
+            className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
           >
             <div className={`max-w-xs md:max-w-md lg:max-w-lg ${
               message.sender === 'user' 
-                ? 'message-bubble-user text-gray-800 rounded-l-2xl rounded-tr-2xl animate-slide-in-right' 
-                : 'message-bubble-ai text-white rounded-r-2xl rounded-tl-2xl animate-slide-in-left'
-            } p-4 shadow-lg transform hover:scale-105 transition-all duration-300`}>
+                ? 'message-bubble-user text-gray-800 rounded-l-2xl rounded-tr-2xl' 
+                : 'message-bubble-ai text-white rounded-r-2xl rounded-tl-2xl'
+            } p-4 shadow-lg`}>
               <div className="flex items-start space-x-2">
                 {message.sender === 'ai' && (
                   <span className="text-lg animate-bounce-gentle">{getMoodIcon(message.mood)}</span>
@@ -197,11 +252,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
                 )}
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
 
-        {isTyping && (
-          <div className="flex justify-start animate-fade-in">
+        <AnimatePresence>
+          {isTyping && (
+            <TypingIndicator characterName={character.name} avatar={character.avatar} />
+          )}
+        </AnimatePresence>
+        {/* Old typing indicator - keeping as fallback
             <div className="message-bubble-ai text-white rounded-r-2xl rounded-tl-2xl p-4 shadow-lg">
               <div className="flex items-center space-x-2">
                 <span className="text-lg animate-bounce-gentle">💭</span>
@@ -214,17 +273,21 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
               </div>
             </div>
           </div>
-        )}
-
+        */}
         <div ref={chatEndRef} />
       </div>
 
       {/* Error Message */}
       {error && (
-        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 glass-effect bg-red-500/20 text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center space-x-2 animate-slide-up">
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="fixed top-20 left-1/2 transform -translate-x-1/2 glass-effect bg-red-500/20 text-white px-6 py-3 rounded-full shadow-lg z-50 flex items-center space-x-2"
+        >
           <AlertCircle className="w-4 h-4 animate-pulse" />
           <span className="text-sm">{error}</span>
-        </div>
+        </motion.div>
       )}
 
       {/* Input Area */}
@@ -236,9 +299,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Type your message..."
+              placeholder={isTyping ? "Wait for response..." : "Type your message..."}
               className="w-full glass-effect border border-white/20 rounded-full px-6 py-3 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-300 hover:border-white/30"
-              disabled={isTyping}
+              disabled={isTyping || sendDisabled}
             />
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
               <Heart className="w-4 h-4 text-pink-400 animate-heart-beat" />
@@ -246,10 +309,17 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
           </div>
           <button
             onClick={handleSendMessage}
-            disabled={!inputValue.trim() || isTyping}
-            className="bg-gradient-to-r from-pink-500 to-rose-500 text-white p-3 rounded-full hover:from-pink-600 hover:to-rose-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:scale-110 active:scale-95 shadow-lg hover:shadow-pink-500/25 animate-glow"
+            disabled={!inputValue.trim() || isTyping || sendDisabled}
+            className="bg-gradient-to-r from-pink-500 to-rose-500 text-white p-3 rounded-full hover:from-pink-600 hover:to-rose-600 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 shadow-lg hover:shadow-pink-500/25 animate-glow"
           >
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              animate={isTyping ? { rotate: 360 } : {}}
+              transition={isTyping ? { duration: 1, repeat: Infinity, ease: "linear" } : {}}
+            >
             <Send className="w-5 h-5" />
+            </motion.div>
           </button>
         </div>
       </div>
@@ -257,12 +327,15 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
       {/* Progress indicator */}
       <div className="fixed top-4 right-4 glass-effect rounded-full p-2 z-50">
         <div className="flex space-x-1">
-          {[...Array(10)].map((_, i) => (
-            <div
+          {[...Array(8)].map((_, i) => (
+            <motion.div
               key={i}
               className={`w-2 h-2 rounded-full transition-all duration-500 ${
                 i < conversationStage ? 'bg-pink-400' : 'bg-white/30'
               }`}
+              initial={{ scale: 0 }}
+              animate={{ scale: i < conversationStage ? 1.2 : 1 }}
+              transition={{ delay: i * 0.1 }}
             />
           ))}
         </div>
