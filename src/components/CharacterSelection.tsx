@@ -36,7 +36,7 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect }) => 
 
       <div className="max-w-6xl mx-auto relative z-10">
         <div className={`text-center mb-12 transition-all duration-1000 ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}>
-          <h1 className="text-5xl font-bold text-white mb-4 font-serif gradient-text">
+          <h1 className="text-5xl font-bold text-white mb-4 font-script gradient-text">
             Choose Your Mystery Date
           </h1>
           <div className="flex justify-center items-center space-x-4 mb-6">
@@ -44,7 +44,7 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect }) => 
             <Heart className="w-6 h-6 text-pink-400 animate-heart-beat" />
             <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-pink-400 to-transparent"></div>
           </div>
-          <p className="text-pink-200 text-lg animate-slide-up delay-300">
+          <p className="text-pink-200 text-lg animate-slide-up delay-300 font-light">
             Four fascinating personalities await. Who will capture your heart?
           </p>
         </div>
@@ -77,7 +77,7 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect }) => 
                   {character.name}
                 </h3>
                 
-                <p className="text-pink-200 text-sm leading-relaxed group-hover:text-white transition-colors duration-300">
+                <p className="text-pink-200 text-sm leading-relaxed group-hover:text-white transition-colors duration-300 font-light">
                   {character.description}
                 </p>
                 

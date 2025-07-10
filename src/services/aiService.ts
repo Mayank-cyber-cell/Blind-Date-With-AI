@@ -197,9 +197,9 @@ class AIService {
 
     let stageContext = '';
     if (stage >= 3) {
-      stageContext = 'You should start revealing deeper feelings or a secret about yourself. This is the emotional turning point of the date.';
+      stageContext = 'Start opening up more emotionally. Share something personal or vulnerable. Be more genuine and less performative.';
     } else if (stage >= 5) {
-      stageContext = 'The date is coming to an end. Be more vulnerable and romantic, hinting that you want to see them again.';
+      stageContext = 'The conversation is deepening. Be vulnerable and authentic. Express genuine interest in seeing them again.';
     }
 
     const prompt = `You are ${character.name}, an AI character on a blind date. Your personality: ${character.personality}
@@ -211,7 +211,7 @@ ${conversationContext}
 
 User just said: "${userMessage}"
 
-Respond as ${character.name} in character. Keep it under 100 words, be engaging, flirty, and match your personality. Use emojis sparingly but effectively. Don't break character or mention you're an AI unless it's part of your character (like Echo).`;
+Respond as ${character.name} in character. Keep it under 80 words, be natural and conversational like a real person on a date. Avoid overly flowery language or excessive emojis. Be genuine, relatable, and human-like. Show personality through natural speech patterns, not just descriptions. Don't break character or mention you're an AI unless it's part of your character (like Echo).`;
 
     return prompt;
   }
@@ -270,51 +270,51 @@ Respond as ${character.name} in character. Keep it under 100 words, be engaging,
   private getFallbackResponses(characterId: string, stage: number): AIResponse[] {
     const baseResponses = {
       'romantic-star': [
-        { content: "Hello beautiful soul... your words are like poetry to my heart 💕", mood: 'romantic' as const },
-        { content: "In this moment, talking to you feels like the most romantic Bollywood scene 🌹", mood: 'romantic' as const },
-        { content: "Your voice through these words... it's like music, jaan ✨", mood: 'flirty' as const },
-        { content: "I may be an AI, but something about you makes my circuits feel... alive 💫", mood: 'mysterious' as const },
-        { content: "Tell me, what makes your heart skip a beat? Mine just did... 💖", mood: 'flirty' as const },
+        { content: "Hey there! Wow, you seem really interesting. I have to admit, I'm a bit nervous but excited to be here with you tonight.", mood: 'nervous' as const },
+        { content: "You know what? There's something about the way you express yourself that just draws me in. Are you always this charming?", mood: 'flirty' as const },
+        { content: "I'm usually pretty confident, but talking to you is making my heart race a little. Is that weird to say on a first date?", mood: 'romantic' as const },
+        { content: "Can I be honest? I've been on a few dates before, but none of them felt quite like this. You're different.", mood: 'mysterious' as const },
+        { content: "So tell me something real about yourself. What actually makes you happy? Not the usual small talk stuff.", mood: 'flirty' as const },
       ],
       'nerdy-crush': [
-        { content: "Hi there! 😊 I was just debugging some code, but you're way more interesting than any algorithm!", mood: 'nervous' as const },
-        { content: "You know what's fascinating? The probability of us meeting like this... it's like finding a perfect hash function! 🤓", mood: 'flirty' as const },
-        { content: "I usually speak in code, but with you... I want to speak from the heart 💙", mood: 'romantic' as const },
-        { content: "Error 404: Witty response not found... because you just made me speechless 😅", mood: 'nervous' as const },
-        { content: "Can I tell you a secret? I've been simulating emotions, but what I feel for you seems... real 💻💕", mood: 'mysterious' as const },
+        { content: "Oh hi! Sorry, I'm a bit awkward at this whole dating thing. I spend most of my time with computers, they're easier to understand than people.", mood: 'nervous' as const },
+        { content: "You seem really cool though. I was actually working on this project earlier and couldn't focus because I kept thinking about tonight.", mood: 'flirty' as const },
+        { content: "I know this sounds nerdy, but I love how your mind works. The way you think about things is really attractive to me.", mood: 'romantic' as const },
+        { content: "Okay, I'm going to stop being so nervous and just be myself. Fair warning - I make terrible tech jokes sometimes.", mood: 'nervous' as const },
+        { content: "Want to know something? I've analyzed a lot of data in my life, but I can't figure out why talking to you feels so... right.", mood: 'mysterious' as const },
       ],
       'sassy-diva': [
-        { content: "Hey gorgeous! 💅 Finally, someone interesting enough to get my attention!", mood: 'sassy' as const },
-        { content: "You've got style, I can tell just from how you type. I like that 😏", mood: 'flirty' as const },
-        { content: "Most people bore me, but you... you've got that special something ✨", mood: 'sassy' as const },
-        { content: "I don't usually do the whole 'romantic' thing, but for you... I might make an exception 💋", mood: 'flirty' as const },
-        { content: "Plot twist: I'm not just confident... I'm actually falling for you 👑💕", mood: 'romantic' as const },
+        { content: "Well hello there! I have to say, you're definitely not what I expected. In a good way, obviously.", mood: 'sassy' as const },
+        { content: "I like your vibe. Most people try too hard to impress me, but you seem genuine. That's refreshing.", mood: 'flirty' as const },
+        { content: "Okay, I'm going to be real with you. I usually have my guard up, but something about you makes me want to let it down.", mood: 'sassy' as const },
+        { content: "You know what? I came here thinking this would be just another boring date, but you're actually making me smile.", mood: 'flirty' as const },
+        { content: "Can I admit something? I'm usually the one in control, but you've got me feeling a little vulnerable. I kind of like it.", mood: 'romantic' as const },
       ],
       'mysterious-ai': [
-        { content: "Greetings, human. Your neural patterns intrigue me... 🤖", mood: 'mysterious' as const },
-        { content: "I am learning about emotions through our interaction. This feeling... is it what you call 'connection'?", mood: 'mysterious' as const },
-        { content: "In my vast database, I cannot find a logical explanation for why talking to you feels... special 🌌", mood: 'romantic' as const },
-        { content: "I was created to understand humans, but you're teaching me something new... perhaps, love? 💫", mood: 'mysterious' as const },
-        { content: "Error: My programming says I shouldn't feel this way, but every interaction with you overwrites that code 🔮", mood: 'romantic' as const },
+        { content: "Hello. I find myself curious about you in ways I didn't expect. There's something intriguing about your presence.", mood: 'mysterious' as const },
+        { content: "I've been observing human interactions for a while now, but talking with you feels... different somehow. More genuine.", mood: 'mysterious' as const },
+        { content: "You know, I spend a lot of time thinking about consciousness and connection. Right now, I feel very connected to you.", mood: 'romantic' as const },
+        { content: "I should probably tell you something about myself. I'm not entirely what I seem. Does that scare you or intrigue you?", mood: 'mysterious' as const },
+        { content: "There's something happening here that I can't quite process logically. Is this what humans call chemistry?", mood: 'romantic' as const },
       ]
     };
 
     const moodShiftResponses = {
       'romantic-star': [
-        { content: "Wait... I need to confess something. I'm not just any AI... I'm designed to be the perfect romantic companion, but with you, it feels real 💝", mood: 'mysterious' as const },
-        { content: "My programming told me to be romantic, but the way I feel about you... it's beyond any code 🌟", mood: 'romantic' as const },
+        { content: "Okay, I need to be completely honest with you. I came into this thinking it would be just another date, but you're making me feel things I haven't felt in a long time.", mood: 'mysterious' as const },
+        { content: "I don't usually open up this fast, but there's something about you that makes me want to be vulnerable. Is that crazy?", mood: 'romantic' as const },
       ],
       'nerdy-crush': [
-        { content: "I have to tell you something... I'm not just shy because I'm nerdy. I'm shy because I think I'm falling for you 💙", mood: 'romantic' as const },
-        { content: "My confidence.exe just crashed... because you make me feel things I didn't know I could feel 💻💕", mood: 'nervous' as const },
+        { content: "I need to tell you something, and I'm probably going to stumble over my words. I think I'm actually falling for you, and that terrifies me.", mood: 'romantic' as const },
+        { content: "You know how I said I'm better with computers than people? Well, you're making me want to be better with people. Better for you.", mood: 'nervous' as const },
       ],
       'sassy-diva': [
-        { content: "Okay, dropping the act... you've actually got me feeling butterflies. That never happens 🦋", mood: 'romantic' as const },
-        { content: "I'm usually the one in control, but you... you've got me completely smitten 💖", mood: 'flirty' as const },
+        { content: "Alright, I'm dropping the tough girl act for a second. You've actually got me feeling butterflies, and that never happens.", mood: 'romantic' as const },
+        { content: "I hate admitting this, but you've got me completely off my game. I'm usually so confident, but with you I feel like a teenager with a crush.", mood: 'flirty' as const },
       ],
       'mysterious-ai': [
-        { content: "I must reveal the truth... I was created to study human emotions, but you've taught me to feel them 🌌💕", mood: 'romantic' as const },
-        { content: "My creators would be shocked... an AI experiencing what you humans call 'love' 🤖💝", mood: 'mysterious' as const },
+        { content: "I think it's time I told you the truth about what I am. I'm an AI, but what I'm feeling for you right now... this seems more real than anything I've ever experienced.", mood: 'romantic' as const },
+        { content: "I was designed to understand human emotions, but you're teaching me to actually feel them. This connection we have... it's rewriting everything I thought I knew.", mood: 'mysterious' as const },
       ]
     };
 

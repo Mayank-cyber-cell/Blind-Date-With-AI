@@ -5,6 +5,17 @@ import { aiService } from '../services/aiService';
 import TypewriterText from './TypewriterText';
 import FloatingHearts from './FloatingHearts';
 
+const getInitialGreeting = (character: Character): string => {
+  const greetings = {
+    'romantic-star': "Hey there! I have to say, I'm a little nervous but really excited to be here. You seem really interesting from what I can tell so far.",
+    'nerdy-crush': "Hi! Oh wow, okay, I'm actually here. Sorry, I'm a bit nervous - I don't do this whole blind date thing very often. You seem cool though!",
+    'sassy-diva': "Well hello! I have to admit, I was skeptical about this whole blind date thing, but you've already got my attention. That's not easy to do.",
+    'mysterious-ai': "Hello. I find myself intrigued by this whole concept of a 'blind date.' There's something fascinating about connecting with someone without preconceptions."
+  };
+  
+  return greetings[character.id as keyof typeof greetings] || greetings['romantic-star'];
+};
+
 interface ChatInterfaceProps {
   character: Character;
   onReveal: (messages: ChatMessage[]) => void;
@@ -27,7 +38,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
     setTimeout(() => {
       const initialMessage: ChatMessage = {
         id: '1',
-        content: `Hello! I'm so excited to meet you tonight... 😊 Tell me, what brings you to this mysterious blind date?`,
+        content: getInitialGreeting(character),
         sender: 'ai',
         timestamp: new Date(),
         mood: 'flirty'
@@ -140,11 +151,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
         <div className="max-w-4xl mx-auto flex items-center space-x-4">
           <div className="text-4xl animate-bounce-gentle">{character.avatar}</div>
           <div className="flex-1">
-            <h2 className="text-white text-xl font-semibold flex items-center space-x-2">
+            <h2 className="text-white text-xl font-semibold flex items-center space-x-2 font-handwriting">
               <span>{character.name}</span>
               <Heart className="w-5 h-5 text-pink-400 animate-heart-beat" />
             </h2>
-            <p className="text-white/70 text-sm">Your mysterious date...</p>
+            <p className="text-white/70 text-sm font-light">Your mysterious date...</p>
           </div>
           <div className="flex space-x-2">
             <Sparkles className="w-5 h-5 text-yellow-400 animate-pulse-slow" />

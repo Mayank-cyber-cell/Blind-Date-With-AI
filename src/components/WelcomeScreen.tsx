@@ -46,13 +46,13 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
       <div className={`text-center space-y-8 px-6 relative z-10 transition-all duration-1000 ${isLoaded ? 'animate-fade-in' : 'opacity-0'}`}>
         <div className="space-y-6">
           <div className="relative">
-            <h1 className="text-6xl md:text-8xl font-bold gradient-text font-serif animate-scale-in">
+            <h1 className="text-6xl md:text-8xl font-bold gradient-text font-script animate-scale-in">
               Blind Date
             </h1>
             <div className="absolute -top-4 -right-4 text-4xl animate-bounce-gentle delay-500">💕</div>
           </div>
           
-          <h2 className="text-3xl md:text-4xl font-light text-pink-200 animate-slide-up delay-300">
+          <h2 className="text-3xl md:text-4xl font-light text-pink-200 animate-slide-up delay-300 font-handwriting">
             with AI
           </h2>
           

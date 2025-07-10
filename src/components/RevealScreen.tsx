@@ -66,8 +66,8 @@ const RevealScreen: React.FC<RevealScreenProps> = ({ character, messages, onRest
         <div className={`text-center mb-12 transition-all duration-1000 ${isRevealed ? 'animate-scale-in' : 'opacity-0 scale-75'}`}>
           <div className="inline-block glass-effect rounded-3xl p-8 mb-8 romantic-glow">
             <div className="text-8xl mb-4 animate-bounce-gentle">{character.revealImage}</div>
-            <h1 className="text-4xl font-bold text-white mb-2 gradient-text">Meet {character.name}!</h1>
-            <p className="text-white/80 text-lg max-w-md mx-auto">
+            <h1 className="text-4xl font-bold text-white mb-2 gradient-text font-script">Meet {character.name}!</h1>
+            <p className="text-white/80 text-lg max-w-md mx-auto font-light">
               {character.description}
             </p>
             <div className="flex justify-center items-center space-x-4 mt-4">
