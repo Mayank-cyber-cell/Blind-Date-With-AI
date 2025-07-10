@@ -13,7 +13,7 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-800 to-rose-900 flex items-center justify-center relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-pink-800 to-rose-900 dark:from-purple-900 dark:via-pink-800 dark:to-rose-900 light-theme:bg-gradient-to-br light-theme:from-pink-50 light-theme:via-purple-50 light-theme:to-rose-50 flex items-center justify-center relative overflow-hidden">
       {/* Animated background elements */}
       <div className="absolute inset-0">
         {/* Floating hearts */}

@@ -28,23 +28,53 @@
   }
   
   .light-theme {
-    --bg-primary: linear-gradient(135deg, #fdf2f8, #fce7f3, #fbcfe8);
-    --bg-secondary: linear-gradient(135deg, #f3e8ff, #e9d5ff, #ddd6fe);
-    --text-primary: #1f2937;
-    --text-secondary: #6b7280;
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(0, 0, 0, 0.1);
+    --bg-primary: linear-gradient(135deg, #fef7ff, #fdf2f8, #fce7f3);
+    --bg-secondary: linear-gradient(135deg, #f8fafc, #f1f5f9, #e2e8f0);
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --glass-bg: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(0, 0, 0, 0.08);
+    --accent-primary: #ec4899;
+    --accent-secondary: #8b5cf6;
+  }
+  
+  .light-theme body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
   }
   
   .light-theme .glass-effect {
     background: var(--glass-bg);
+    backdrop-filter: blur(12px);
     border-color: var(--glass-border);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   }
   
   .light-theme .message-bubble-ai {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
-    color: #1f2937;
-    border-color: rgba(139, 92, 246, 0.2);
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(236, 72, 153, 0.08));
+    color: var(--text-primary);
+    border-color: rgba(139, 92, 246, 0.15);
+    backdrop-filter: blur(8px);
+  }
+  
+  .light-theme .message-bubble-user {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 250, 252, 0.9));
+    color: var(--text-primary);
+    border-color: rgba(0, 0, 0, 0.08);
+  }
+  
+  .light-theme .gradient-text {
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary), #06b6d4);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .light-theme .romantic-glow {
+    box-shadow: 
+      0 0 20px rgba(236, 72, 153, 0.15),
+      0 0 40px rgba(236, 72, 153, 0.08),
+      inset 0 0 20px rgba(255, 255, 255, 0.3);
   }
 }
 

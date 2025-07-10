@@ -53,16 +53,17 @@ function App() {
   };
 
   return (
-    <div className={`min-h-screen ${isDark ? '' : 'light-theme'}`}>
+    <div className={`min-h-screen transition-colors duration-500 ${isDark ? 'dark' : 'light-theme'}`}>
       <Toaster 
         position="top-center"
         toastOptions={{
           duration: 3000,
           style: {
-            background: 'rgba(0, 0, 0, 0.8)',
-            color: '#fff',
+            background: isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.95)',
+            color: isDark ? '#fff' : '#1f2937',
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(255, 255, 255, 0.2)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.2)' : '1px solid rgba(0, 0, 0, 0.1)',
+            boxShadow: isDark ? '0 4px 16px rgba(0, 0, 0, 0.3)' : '0 4px 16px rgba(0, 0, 0, 0.1)',
           },
         }}
       />

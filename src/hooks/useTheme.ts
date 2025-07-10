@@ -4,14 +4,21 @@ export const useTheme = () => {
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('theme');
-      return saved ? saved === 'dark' : true; // Default to dark theme
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return saved ? saved === 'dark' : prefersDark; // Respect system preference
     }
-    return true;
+    return false;
   });
 
   useEffect(() => {
     localStorage.setItem('theme', isDark ? 'dark' : 'light');
-    document.documentElement.classList.toggle('light-theme', !isDark);
+    if (isDark) {
+      document.documentElement.classList.remove('light-theme');
+      document.body.classList.remove('light-theme');
+    } else {
+      document.documentElement.classList.add('light-theme');
+      document.body.classList.add('light-theme');
+    }
   }, [isDark]);
 
   const toggleTheme = () => setIsDark(!isDark);

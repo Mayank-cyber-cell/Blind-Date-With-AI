@@ -16,7 +16,7 @@ const CharacterSelection: React.FC<CharacterSelectionProps> = ({ onSelect }) => 
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 py-12 px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 dark:from-indigo-900 dark:via-purple-900 dark:to-pink-900 light-theme:bg-gradient-to-br light-theme:from-indigo-50 light-theme:via-purple-50 light-theme:to-pink-50 py-12 px-4 relative overflow-hidden">
       {/* Animated background */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-20 text-pink-300 opacity-20 animate-float">
