@@ -85,10 +85,10 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
         setConversationStage(prev => prev + 1);
 
         // Trigger reveal after several messages
-        if (conversationStage >= 4) {
+        if (conversationStage >= 8) {
           setTimeout(() => {
             onReveal([...messages, userMessage, aiMessage]);
-          }, 3000);
+          }, 2000);
         }
         
         setIsTyping(false);
@@ -257,7 +257,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ character, onReveal }) =>
       {/* Progress indicator */}
       <div className="fixed top-4 right-4 glass-effect rounded-full p-2 z-50">
         <div className="flex space-x-1">
-          {[...Array(6)].map((_, i) => (
+          {[...Array(10)].map((_, i) => (
             <div
               key={i}
               className={`w-2 h-2 rounded-full transition-all duration-500 ${

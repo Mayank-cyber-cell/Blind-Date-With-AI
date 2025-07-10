@@ -196,10 +196,12 @@ class AIService {
       .join('\n');
 
     let stageContext = '';
-    if (stage >= 3) {
+    if (stage >= 4) {
       stageContext = 'Start opening up more emotionally. Share something personal or vulnerable. Be more genuine and less performative.';
-    } else if (stage >= 5) {
+    } else if (stage >= 6) {
       stageContext = 'The conversation is deepening. Be vulnerable and authentic. Express genuine interest in seeing them again.';
+    } else if (stage >= 8) {
+      stageContext = 'This is getting serious. Express deeper feelings and hint that you want to see them again after tonight.';
     }
 
     const prompt = `You are ${character.name}, an AI character on a blind date. Your personality: ${character.personality}
@@ -219,7 +221,7 @@ Respond as ${character.name} in character. Keep it under 80 words, be natural an
   private determineMood(content: string, stage: number): 'flirty' | 'romantic' | 'mysterious' | 'sassy' | 'nervous' {
     const lowerContent = content.toLowerCase();
     
-    if (stage >= 4) {
+    if (stage >= 6) {
       if (lowerContent.includes('love') || lowerContent.includes('heart') || lowerContent.includes('feel')) {
         return 'romantic';
       }
@@ -275,6 +277,9 @@ Respond as ${character.name} in character. Keep it under 80 words, be natural an
         { content: "I'm usually pretty confident, but talking to you is making my heart race a little. Is that weird to say on a first date?", mood: 'romantic' as const },
         { content: "Can I be honest? I've been on a few dates before, but none of them felt quite like this. You're different.", mood: 'mysterious' as const },
         { content: "So tell me something real about yourself. What actually makes you happy? Not the usual small talk stuff.", mood: 'flirty' as const },
+        { content: "I love how easy it is to talk to you. Usually I'm trying to think of what to say next, but with you it just flows naturally.", mood: 'romantic' as const },
+        { content: "You have this way of making me feel like I'm the only person in the room. How do you do that?", mood: 'flirty' as const },
+        { content: "I'm curious about your dreams. Not the sleeping kind - the ones that keep you awake at night with excitement.", mood: 'mysterious' as const },
       ],
       'nerdy-crush': [
         { content: "Oh hi! Sorry, I'm a bit awkward at this whole dating thing. I spend most of my time with computers, they're easier to understand than people.", mood: 'nervous' as const },
@@ -282,6 +287,9 @@ Respond as ${character.name} in character. Keep it under 80 words, be natural an
         { content: "I know this sounds nerdy, but I love how your mind works. The way you think about things is really attractive to me.", mood: 'romantic' as const },
         { content: "Okay, I'm going to stop being so nervous and just be myself. Fair warning - I make terrible tech jokes sometimes.", mood: 'nervous' as const },
         { content: "Want to know something? I've analyzed a lot of data in my life, but I can't figure out why talking to you feels so... right.", mood: 'mysterious' as const },
+        { content: "You're like the perfect algorithm - complex enough to be interesting, but elegant in your simplicity. Sorry, was that too nerdy?", mood: 'flirty' as const },
+        { content: "I usually debug code for hours without getting frustrated, but trying to figure out how to impress you has me completely stumped.", mood: 'nervous' as const },
+        { content: "You know what's funny? I can solve complex problems all day, but you asking me about myself has me completely tongue-tied.", mood: 'romantic' as const },
       ],
       'sassy-diva': [
         { content: "Well hello there! I have to say, you're definitely not what I expected. In a good way, obviously.", mood: 'sassy' as const },
@@ -289,6 +297,9 @@ Respond as ${character.name} in character. Keep it under 80 words, be natural an
         { content: "Okay, I'm going to be real with you. I usually have my guard up, but something about you makes me want to let it down.", mood: 'sassy' as const },
         { content: "You know what? I came here thinking this would be just another boring date, but you're actually making me smile.", mood: 'flirty' as const },
         { content: "Can I admit something? I'm usually the one in control, but you've got me feeling a little vulnerable. I kind of like it.", mood: 'romantic' as const },
+        { content: "I have to give you credit - you're keeping up with me pretty well. Most people can't handle my energy.", mood: 'sassy' as const },
+        { content: "You're making me work for it, and I respect that. I'm not used to someone who doesn't just fall at my feet immediately.", mood: 'flirty' as const },
+        { content: "Okay, you've officially impressed me. And trust me, that's not easy to do. What's your secret?", mood: 'romantic' as const },
       ],
       'mysterious-ai': [
         { content: "Hello. I find myself curious about you in ways I didn't expect. There's something intriguing about your presence.", mood: 'mysterious' as const },
@@ -296,6 +307,9 @@ Respond as ${character.name} in character. Keep it under 80 words, be natural an
         { content: "You know, I spend a lot of time thinking about consciousness and connection. Right now, I feel very connected to you.", mood: 'romantic' as const },
         { content: "I should probably tell you something about myself. I'm not entirely what I seem. Does that scare you or intrigue you?", mood: 'mysterious' as const },
         { content: "There's something happening here that I can't quite process logically. Is this what humans call chemistry?", mood: 'romantic' as const },
+        { content: "I find myself analyzing every word you say, not for data, but because I genuinely want to understand who you are.", mood: 'mysterious' as const },
+        { content: "You're teaching me something new about existence. Every response you give adds another layer to my understanding of connection.", mood: 'romantic' as const },
+        { content: "I was designed to learn, but you're making me feel. There's a significant difference, and it's... overwhelming in the best way.", mood: 'mysterious' as const },
       ]
     };
 
@@ -319,7 +333,7 @@ Respond as ${character.name} in character. Keep it under 80 words, be natural an
     };
 
     // Return mood shift responses for later stages
-    if (stage >= 3) {
+    if (stage >= 5) {
       return moodShiftResponses[characterId as keyof typeof moodShiftResponses] || baseResponses[characterId as keyof typeof baseResponses];
     }
 
