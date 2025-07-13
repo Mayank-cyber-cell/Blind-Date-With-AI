@@ -213,6 +213,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Fonts from Google Fonts
 - Inspiration from modern dating apps and romantic web design
 
----
+----
 
 Made with 💕 for the romantic souls of the digital age!
